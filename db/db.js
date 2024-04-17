@@ -16,4 +16,26 @@ db.connect((err) => {
     console.log("Conectar base");
 });
 
+function handleDisconnect() {
+    db.connect((err) => {
+        if (err) {
+            console.error('Error connecting to database:', err);
+            setTimeout(handleDisconnect, 2000); // Intentar reconectar después de 2 segundos
+        } else {
+            console.log('Connected to database!');
+        }
+    });
+
+    db.on('error', (err) => {
+        console.error('Database error:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect(); // Reconectar si se pierde la conexión
+        } else {
+            throw err;
+        }
+    });
+}
+
+handleDisconnect(); // Iniciar la conexión inicial y manejar reconexiones
+
 module.exports = db;
