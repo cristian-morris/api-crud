@@ -8,13 +8,7 @@ const db = mysql.createConnection({
     port: process.env.PORT
 });
 
-db.connect((err) => {
-    if (err) {
-        console.log("Error conectar base", err);
-        return;
-    }
-    console.log("Conectar base");
-});
+
 
 function handleDisconnect() {
     db.connect((err) => {
