@@ -13,7 +13,7 @@ app.set("port", process.env.PORT || 3002);
 app.post("/create", (req, res) => {
     const { nombre, categoria, añoDeSalida, precio } = req.body;
 
-    db.query('INSERT INTO game (nombre, categoria, añoDeSalida, precio) VALUES (?, ?, ?, ?)', [nombre, categoria, añoDeSalida, precio], (err, result) => {
+    db.pool.query('INSERT INTO game (nombre, categoria, añoDeSalida, precio) VALUES (?, ?, ?, ?)', [nombre, categoria, añoDeSalida, precio], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al registrar el juego");
@@ -25,7 +25,7 @@ app.post("/create", (req, res) => {
 
 // Obtener juegos
 app.get("/games", (req, res) => {
-    db.query("SELECT * FROM game", (err, results) => {
+    db.pool.query("SELECT * FROM game", (err, results) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al obtener los juegos");
@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 app.get("/games/:id", (req, res) => {
     const gameId = req.params.id;
 
-    db.query("SELECT * FROM game WHERE id = ?", [gameId], (err, result) => {
+    db.pool.query("SELECT * FROM game WHERE id = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al obtener el juego");
@@ -62,7 +62,7 @@ app.put("/games/:id", (req, res) => {
     const gameId = req.params.id;
     const { nombre, categoria, añoDeSalida, precio } = req.body;
 
-    db.query("UPDATE game SET nombre = ?, categoria = ?, añoDeSalida = ?, precio = ? WHERE id = ?", [nombre, categoria, añoDeSalida, precio, gameId], (err, result) => {
+    db.pool.query("UPDATE game SET nombre = ?, categoria = ?, añoDeSalida = ?, precio = ? WHERE id = ?", [nombre, categoria, añoDeSalida, precio, gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al actualizar el juego");
@@ -76,7 +76,7 @@ app.put("/games/:id", (req, res) => {
 app.delete("/games/:id", (req, res) => {
     const gameId = req.params.id;
 
-    db.query("DELETE FROM game WHERE id = ?", [gameId], (err, result) => {
+    db.pool.query("DELETE FROM game WHERE id = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al eliminar el juego");
